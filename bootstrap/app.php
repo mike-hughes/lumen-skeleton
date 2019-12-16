@@ -59,25 +59,13 @@ $app->configure('swagger-lume');
 |
 */
 
-$app->middleware([
-    \LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware::class
-]);
-
-$app->routeMiddleware([
-    'check-authorization-params' => \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class,
-    'oauth' => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
-    'oauth-client' => \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class,
-    'oauth-user' => \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class,
-]);
-
 // $app->middleware([
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
-
+$app->routeMiddleware([
+    'auth' => App\Http\Middleware\Authenticate::class,
+]);
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers
@@ -91,9 +79,12 @@ $app->routeMiddleware([
 if ($app->environment() == 'local') {
     $app->register(Wn\Generators\CommandsServiceProvider::class);
 }
+$app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
+$app->register(LaravelDoctrine\Extensions\GedmoExtensionsServiceProvider::class);
+$app->register(LaravelDoctrine\Migrations\MigrationsServiceProvider::class);
 $app->register(\SwaggerLume\ServiceProvider::class);
-$app->register(\LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class);
-$app->register(\LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class);
+$app->register(Laravel\Passport\PassportServiceProvider::class);
+$app->register(Dusterio\LumenPassport\PassportServiceProvider::class);
 
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
@@ -116,7 +107,9 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
-class_alias(\LucaDegasperi\OAuth2Server\Facades\Authorizer::class, 'Authorizer');
-class_alias('Illuminate\Support\Facades\Config', 'Config');
+$app->configure('auth');
+class_alias('LaravelDoctrine\ORM\Facades\EntityManager', 'EntityManager');
+class_alias('LaravelDoctrine\ORM\Facades\Registry', 'Registry');
+class_alias('LaravelDoctrine\ORM\Facades\Doctrine', 'Doctrine');
 
 return $app;
