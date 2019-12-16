@@ -12,6 +12,10 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/mike-hughes/lumen-generators"
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/mike-hughes/laravel-slack"
 		}
 	],
     "require": {
@@ -20,7 +24,8 @@
         "laravel-doctrine/orm": "^1.5",
         "laravel/lumen-framework": "^6.0",
         "mike-hughes/lumen-generators": "dev-master",
-        "mike-hughes/oauth2-server-laravel": "dev-master"
+        "mike-hughes/oauth2-server-laravel": "dev-master",
+		"mike-hughes/laravel-slack":  "dev-master"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
